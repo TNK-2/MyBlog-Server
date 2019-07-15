@@ -1,0 +1,51 @@
+
+#==================================================================
+# Spring設定
+#==================================================================
+spring.devtools.remote.secret: HotReload
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  #    show-sql: true
+  #    properties:
+  #      hibernate:
+  #        format_sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${datasource.url.master:mysql}:3306/myblog?useSSL=false
+    username: ${datasource.username:root}
+    password: ${datasource.password:password}
+    initialization-mode: ${datasource.initialization-mode:never}
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  main:
+    allow-bean-definition-overriding: true
+#==================================================================
+# ロギング設定
+#==================================================================
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+          EnumType: trace
+
+#==================================================================
+# AWS parameters
+#==================================================================
+#aws:
+#  s3:
+#    textureUrl: ${texture.url:http://xxxxxxxxxxx/xxxxxxx}
+#    bucketName: ${texture.bucketname:xxxxxxxxxxx}
+
+# WebSocketの受送信の最大メッセージサイズ(バイト)
+message-size-limit: 1024 * 80
+
+identifykey-range: 10000000..99999999

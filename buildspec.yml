@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region ap-northeast-1)
+  build:
+    commands:
+      - echo Build started on `date`
+      - cd ./myblog-api && chmod +x gradlew
+      - ./gradlew build buildDocker -x test --stacktrace
+      - cd $CODEBUILD_SRC_DIR
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker tag com.teamlab/myblog-api:0.0.1-SNAPSHOT 365894314481.dkr.ecr.ap-northeast-1.amazonaws.com/myblog-dev:latest
+      - docker push 365894314481.dkr.ecr.ap-northeast-1.amazonaws.com/myblog-dev:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"myblog-dev","imageUri":"%s"}]' 365894314481.dkr.ecr.ap-northeast-1.amazonaws.com/myblog-dev > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
+cache:
+  paths:
+    - '/root/.gradle/wrapper/**/*'
+    - '/root/.gradle/caches/**/*'
+

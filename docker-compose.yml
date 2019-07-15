@@ -1,0 +1,29 @@
+version: '3.6'
+services:
+  weddingapp:
+    container_name: "myblog-api"
+    working_dir: /var/app/
+    image: adoptopenjdk/openjdk8:alpine
+    tty: true
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - "./:/var/app:cached"
+      - "gradle-dependencies:/root/.gradle"
+    command: ./gradlew clean bootRun --debug-jvm
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+      - "./db/conf/my.cnf:/etc/mysql/my.cnf"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      BIND-ADDRESS: 0.0.0.0
+volumes:
+  gradle-dependencies:
+    driver: local
+  mysql-data:
+    driver: local
