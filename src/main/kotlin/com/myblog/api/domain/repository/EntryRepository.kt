@@ -1,4 +1,4 @@
 package com.myblog.api.domain.repository
 
-class EntryRepository {
+interface EntryRepository {
 }
