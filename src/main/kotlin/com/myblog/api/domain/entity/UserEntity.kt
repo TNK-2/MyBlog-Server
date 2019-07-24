@@ -20,7 +20,7 @@ data class UserEntity (
 
     @Basic
     @Column(name = "access_token", nullable = true, length = 128)
-    var accessToken: String
+    var accessToken: String?
 )
 {
 }

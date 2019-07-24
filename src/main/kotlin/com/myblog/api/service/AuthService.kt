@@ -9,7 +9,6 @@ class AuthService (
     private val userService: UserService
 )
 {
-
     fun isAuthenticated(accessToken: String?): Boolean {
         accessToken ?: return false;
         userService.getUserByAccessToken(accessToken) ?: return false
